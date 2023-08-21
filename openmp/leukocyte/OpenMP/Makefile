@@ -5,7 +5,7 @@ endif
 
 # C compiler
 CC = gcc
-CC_FLAGS = -g -O3 -Wall -fopenmp -I$(MATRIX_DIR)  -I../../../common
+CC_FLAGS = -g -O3 -fPIE -Wall -fopenmp -I$(MATRIX_DIR)  -I../../../common
 
 # Matrix library path
 MATRIX_DIR = ../meschach_lib
@@ -14,7 +14,7 @@ MATRIX_DIR = ../meschach_lib
 leukocyte: detect_main.o avilib.o find_ellipse.o track_ellipse.o misc_math.o $(MATRIX_DIR)/meschach.a
 	$(CC) $(CC_FLAGS) -lm avilib.o find_ellipse.o track_ellipse.o misc_math.o detect_main.o -o leukocyte -lm $(MATRIX_DIR)/meschach.a -lpthread
 
-%.o: %.[ch]
+%.o: %.c
 	$(CC) $(OUTPUT) $(CC_FLAGS) -DENABLE_RODINIA_HOOKS $< -c
 
 detect_main.o: find_ellipse.h track_ellipse.h avilib.h
@@ -25,4 +25,4 @@ $(MATRIX_DIR)/meschach.a:
 	cd $(MATRIX_DIR); ./configure --with-all; make all; make clean
 
 clean:
-	rm find_ellipse.o detect_main.o leukocyte
+	rm *.o leukocyte
